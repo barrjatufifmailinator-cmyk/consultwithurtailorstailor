@@ -1,44 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
 
 export default function PaystackButton({ email, amount, onSuccess }) {
-  const publicKey = "pk_test_f6d4d2ab1d7c60c12eddd02c2fa31738d8239785";
-  const [loading, setLoading] = useState(false);
+  // Convert amount to kobo for Paystack
+  const amountInKobo = amount * 100;
 
   useEffect(() => {
+    // Load Paystack script dynamically if not already loaded
     if (!document.getElementById("paystack-script")) {
-      const s = document.createElement("script");
-      s.src = "https://js.paystack.co/v1/inline.js";
-      s.id = "paystack-script";
-      s.async = true;
-      document.body.appendChild(s);
+      const script = document.createElement("script");
+      script.src = "https://js.paystack.co/v1/inline.js";
+      script.id = "paystack-script";
+      script.async = true;
+      document.body.appendChild(script);
     }
   }, []);
 
-  const handleClick = () => {
+  const handlePayment = () => {
     if (!window.PaystackPop) {
-      alert("Paystack not loaded yet. Please try again in a moment.");
+      alert("Paystack is not loaded yet. Please try again.");
       return;
     }
-
-    if (!email || !email.includes("@")) {
-      alert("Please provide a valid email.");
-      return;
-    }
-
-    setLoading(true);
 
     const handler = window.PaystackPop.setup({
-      key: publicKey,
-      email,
-      amount: amount * 100,
+      key: "pk_test_f6d4d2ab1d7c60c12eddd02c2fa31738d8239785", // Your test public key
+      email: email,
+      amount: amountInKobo,
       currency: "GHS",
-      callback(response) {
-        setLoading(false);
-        onSuccess(response);
+      callback: function (response) {
+        if (onSuccess) onSuccess(response);
       },
-      onClose() {
-        setLoading(false);
+      onClose: function () {
         alert("Payment was cancelled.");
       },
     });
@@ -47,8 +40,11 @@ export default function PaystackButton({ email, amount, onSuccess }) {
   };
 
   return (
-    <button onClick={handleClick} disabled={loading} className="bg-[#800020] text-white font-semibold px-6 py-3 rounded-lg shadow hover:scale-105 transition-transform duration-200 disabled:opacity-60">
-      {loading ? "Processing..." : `Pay Now — ₵${amount}`}
+    <button
+      onClick={handlePayment}
+      className="bg-[#800020] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#a10030] transition-all duration-300 hover:scale-105"
+    >
+      Pay Now
     </button>
   );
 }

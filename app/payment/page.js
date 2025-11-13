@@ -1,14 +1,27 @@
 "use client";
+
 import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import PaystackButton from "../../components/PaystackButton.mjs";
 
 export default function PaymentPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const title = searchParams.get("title") || "Consultation";
-  const price = Number(searchParams.get("price")) || 0;
-  const email = searchParams.get("email") || "";
+  // Use state to avoid SSR issues
+  const [title, setTitle] = useState("Consultation");
+  const [price, setPrice] = useState(0);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    // Populate values on client-side
+    const t = searchParams.get("title") || "Consultation";
+    const p = Number(searchParams.get("price")) || 0;
+    const e = searchParams.get("email") || "";
+    setTitle(t);
+    setPrice(p);
+    setEmail(e);
+  }, [searchParams]);
 
   const handlePaymentSuccess = (response) => {
     console.log("Payment successful:", response);
@@ -28,7 +41,11 @@ export default function PaymentPage() {
         Amount: <span className="font-bold">₵{price}</span>
       </p>
 
-      <PaystackButton email={email} amount={price} onSuccess={handlePaymentSuccess} />
+      <PaystackButton
+        email={email || "customer@example.com"} // fallback email
+        amount={price}
+        onSuccess={handlePaymentSuccess}
+      />
 
       <button
         onClick={() => router.push("/")}
