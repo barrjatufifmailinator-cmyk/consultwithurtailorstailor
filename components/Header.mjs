@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function Header() {
+  const [isClient, setIsClient] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setIsClient(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Don’t render anything until mounted — prevents hydration flicker/double text
-  if (!isMounted) return null;
+  // Render nothing until the component is mounted on the client
+  if (!isClient) return null;
 
-  // Move these inside the “mounted” phase
+  // Safe to call framer-motion hooks after mount
   const { scrollY } = useScroll();
   const blurAmount = useTransform(scrollY, [0, 300], ["blur(0px)", "blur(12px)"]);
   const opacity = useTransform(scrollY, [0, 300], [0.4, 0.9]);
@@ -35,7 +35,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
-        {/* Logo */}
+        {/* Brand */}
         <motion.h1
           className="text-xl md:text-2xl font-semibold tracking-wide text-[#800020]"
           initial={{ opacity: 0, y: -10 }}
@@ -45,7 +45,7 @@ export default function Header() {
           URTAILORSTAILOR
         </motion.h1>
 
-        {/* Nav */}
+        {/* Nav Links */}
         <nav className="hidden md:flex space-x-8 font-medium">
           {["about", "services", "booking", "contact"].map((item) => (
             <Link
