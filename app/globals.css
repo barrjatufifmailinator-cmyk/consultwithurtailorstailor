@@ -1,0 +1,117 @@
+/* 1️⃣ Import Google Fonts first (Didot for luxury look) */
+@import url('https://fonts.googleapis.com/css2?family=Didot&display=swap');
+
+/* 2️⃣ Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3️⃣ Root variables */
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --highlight: #F5F0E6;
+  --burgundy: #800020;
+}
+
+/* 4️⃣ Font utility for luxury Didot font */
+.font-didot {
+  font-family: 'Didot', serif;
+}
+
+/* 5️⃣ Base styles */
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+}
+
+/* 6️⃣ Images and media */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 7️⃣ Links and focus */
+a {
+  transition: color 200ms ease, transform 200ms ease;
+}
+
+button, a, input, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus {
+  outline: none;
+}
+
+/* Visible focus for keyboard users */
+:focus-visible {
+  outline: 3px solid rgba(128,0,32,0.16);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* 8️⃣ Shimmer animation for text */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--burgundy) 0%, #b22222 50%, var(--burgundy) 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* 9️⃣ Shimmer-button style */
+.shimmer-button {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--burgundy) 0%, #b22222 50%, var(--burgundy) 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* 10️⃣ Utility for improved tap targets */
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem;
+}
+
+/* 11️⃣ Small accessibility helpers */
+.sr-only {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
