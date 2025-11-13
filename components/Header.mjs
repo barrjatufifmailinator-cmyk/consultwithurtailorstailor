@@ -4,23 +4,20 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function Header() {
-  const [isClient, setIsClient] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Dynamic blur effect based on scroll position
+  const blurAmount = useTransform(scrollY, [0, 300], ["blur(0px)", "blur(12px)"]);
+  const opacity = useTransform(scrollY, [0, 300], [0.4, 0.9]);
 
   useEffect(() => {
-    setIsClient(true);
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Render nothing until the component is mounted on the client
-  if (!isClient) return null;
-
-  // Safe to call framer-motion hooks after mount
-  const { scrollY } = useScroll();
-  const blurAmount = useTransform(scrollY, [0, 300], ["blur(0px)", "blur(12px)"]);
-  const opacity = useTransform(scrollY, [0, 300], [0.4, 0.9]);
 
   return (
     <motion.header
@@ -35,7 +32,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
-        {/* Brand */}
+        {/* Logo / Brand Name */}
         <motion.h1
           className="text-xl md:text-2xl font-semibold tracking-wide text-[#800020]"
           initial={{ opacity: 0, y: -10 }}
@@ -45,21 +42,34 @@ export default function Header() {
           URTAILORSTAILOR
         </motion.h1>
 
-        {/* Nav Links */}
+        {/* Navigation */}
         <nav className="hidden md:flex space-x-8 font-medium">
-          {["about", "services", "booking", "contact"].map((item) => (
-            <Link
-              key={item}
-              href={`#${item}`}
-              className={`transition-colors duration-300 ${
-                isScrolled ? "text-[#800020]" : "text-white"
-              }`}
-            >
-              {item.charAt(0).toUpperCase() + item.slice(1)}
-            </Link>
-          ))}
+          <Link
+            href="#about"
+            className={`transition-colors duration-300 ${isScrolled ? "text-[#800020]" : "text-white"}`}
+          >
+            About
+          </Link>
+          <Link
+            href="#services"
+            className={`transition-colors duration-300 ${isScrolled ? "text-[#800020]" : "text-white"}`}
+          >
+            Services
+          </Link>
+          <Link
+            href="#booking"
+            className={`transition-colors duration-300 ${isScrolled ? "text-[#800020]" : "text-white"}`}
+          >
+            Booking
+          </Link>
+          <Link
+            href="#contact"
+            className={`transition-colors duration-300 ${isScrolled ? "text-[#800020]" : "text-white"}`}
+          >
+            Contact
+          </Link>
         </nav>
       </div>
     </motion.header>
   );
-}
+} 
