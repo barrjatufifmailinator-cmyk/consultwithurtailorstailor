@@ -24,7 +24,7 @@ export default function PaystackButton({ email, amount, onSuccess }) {
     }
 
     const handler = window.PaystackPop.setup({
-      key: "pk_test_f6d4d2ab1d7c60c12eddd02c2fa31738d8239785", // Replace with your own public key
+      key: "pk_live_9fff02ef9606e6cc271b06faa8bd66cc319bbb05", // LIVE PUBLIC KEY
       email,
       amount: amountInKobo,
       currency: "GHS",
